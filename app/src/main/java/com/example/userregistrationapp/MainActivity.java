@@ -11,7 +11,6 @@ import androidx.room.Room;
 // Classe para verificar erros com log
 import android.util.Log;
 
-
 // Classe principal da atividade de cadastro de usúarios
 public class MainActivity extends AppCompatActivity {
 
@@ -53,7 +52,36 @@ public class MainActivity extends AppCompatActivity {
             String email    = editTextEmail.getText().toString();
             String phone    = editTextPhone.getText().toString();
 
+            // Verifica se os valores foram capturados corretamente
+            Log.d("MainActivity", "Nome:" + name + ",CPF:" + cpf +
+                    ",Email:" + email + ",Phone" + phone);
+
+            // Verifica se os campos obrigatórios (Nome e CPF) foram preenchidos
+            if (!name.isEmpty() && !cpf.isEmpty()) {
+                // Cria objeto usuário e insere no banco de dados
+                User user = new User(name, cpf, email, phone);
+                userDao.insert(user);
+
+                // Confirma a inserção
+                Log.d("MainActivity", "Campos inseridos com sucesso");
+
+                Toast.makeText(MainActivity.this, "Usuário cadastrado",
+                        Toast.LENGTH_SHORT).show();
+            } else{
+                // Confirma erro na inserção
+                Log.d("MainActivity", "Erro: Campos obrigatórios vazios");
+
+                // Exibe uma mensagem de erros se os campos obrigatórios
+                // não forem preenchidos
+                Toast.makeText(MainActivity.this, "Preencha os campos obrigatórios",
+                        Toast.LENGTH_SHORT).show();
+            }
         });
+
+        // Configura o botão para abrir a tela de relatório
+        buttonReport.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, ReportActivity.class))
+                );
 
     }
 }
